@@ -1,8 +1,7 @@
 // import the express application and type definition
 import express, { Express } from "express";
 import morgan from "morgan";
-
-import itemRoutes from "./api/v1/routes/itemRoutes";
+import itemRoutes from "./api/v1/routes/eventRoutes";
 
 // initialize the express application
 const app: Express = express();

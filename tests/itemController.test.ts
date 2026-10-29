@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import { HTTP_STATUS } from "../src/constants/httpConstants";
-import * as itemController from "../src/api/v1/controllers/itemController";
-import * as itemService from "../src/api/v1/services/itemService";
-import { Item } from "../src/api/v1/models/itemModel"; 
+import * as eventController from "../src/api/v1/controllers/eventController";
+import * as eventService from "../src/api/v1/services/eventService";
+import { Event } from "../src/api/v1/models/eventModel"; 
 import { mock } from "node:test";
 import { beforeEach,afterAll, describe, expect, it, jest } from "@jest/globals";
 
-jest.mock("../src/api/v1/services/itemService");
+jest.mock("../src/api/v1/services/eventService");
 
-describe("Item Controller", () => {
+describe("Event Controller", () => {
     let mockReq: Partial<Request>;
     let mockRes: Partial<Response>;
     let mockNext: NextFunction;
@@ -24,20 +24,28 @@ describe("Item Controller", () => {
         mockNext = jest.fn();
     });
 
-    describe("getAllItems", () => {
+    describe("getAllEvents", () => {
         it("should handle successful operation", async () => {
-            const mockItems: Item[] = [
+            const mockEvents: Event[] = [
                 { 
                     id: "1",
-                    name: "Test Item",
-                    description: "Test description",
+                    name: "Test Event",
+                    date: new Date(),
+                    capacity: 100,
+                    registrationCount: 50,
+                    status: "active",
+                    category: "TestCategory",
                     createdAt: new Date(),
                     updatedAt: new Date(),
                 },
             ];
-            (itemService.getAllItems as jest.Mock).mockReturnValue(mockItems);
+            (eventService.getAllEvents as jest.Mock).mockReturnValue(mockEvents);
 
-            await itemController.getAllItems(
+            await (eventController.getAllEvents as unknown as (
+                req: Request,
+                res: Response,
+                next: NextFunction
+            ) => Promise<void>)(
                 mockReq as Request,
                 mockRes as Response,
                 mockNext
@@ -45,20 +53,24 @@ describe("Item Controller", () => {
 
             expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.OK);
             expect(mockRes.json).toHaveBeenCalledWith({
-                message: "Items retrieved successfully",
-                data: mockItems,
+                message: "Events retrieved successfully",
+                data: mockEvents,
             });
         });
     });
 
-    describe("createItem", () => {
+    describe("createEvent", () => {
         it("should handle successful creation", async () => {
             const mockBody = {
-                name: "Test Item",
-                description: "Test description",
+                name: "Test Event",
+                date: new Date(),
+                capacity: 100,
+                registrationCount: 50,
+                status: "active",
+                category: "TestCategory",
             };
 
-            const mockItem: Item = {
+            const mockEvent: Event = {
                 id: "test_id",
                 createdAt: new Date(),
                 updatedAt: new Date(),
@@ -66,9 +78,13 @@ describe("Item Controller", () => {
             };
 
             mockReq.body = mockBody;
-            (itemService.createItem as jest.Mock).mockReturnValue(mockItem);
+            (eventService.createEvents as jest.Mock).mockReturnValue(mockEvent);
 
-            await itemController.createItem(
+            await (eventController.createEvents as unknown as (
+                req: Request,
+                res: Response,
+                next: NextFunction
+            ) => Promise<void>)(
                 mockReq as Request,
                 mockRes as Response,
                 mockNext
@@ -76,15 +92,19 @@ describe("Item Controller", () => {
 
             expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.CREATED);
             expect(mockRes.json).toHaveBeenCalledWith({
-                message: "Item created successfully",
-                data: mockItem,
+                message: "Event created successfully",
+                data: mockEvent,
             });
         });
 
         it("should return 400 when name is missing", async () => {
             mockReq.body = { description: "Test Description" };
 
-            await itemController.createItem(
+            await (eventController.createEvents as unknown as (
+                req: Request,
+                res: Response,
+                next: NextFunction
+            ) => Promise<void>)(
                 mockReq as Request,
                 mockRes as Response,
                 mockNext
@@ -92,7 +112,7 @@ describe("Item Controller", () => {
 
             expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.BAD_REQUEST);
             expect(mockRes.json).toHaveBeenCalledWith({
-                message: "Item name is required",
+                message: "Event name is required",
             });
         });
     });

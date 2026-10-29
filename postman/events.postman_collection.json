@@ -1,18 +1,18 @@
 {
 	"info": {
 		"_postman_id": "5ec198ea-3ef6-41c3-901c-80ccfb784fe8",
-		"name": "Items",
+		"name": "Events",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "29575153"
 	},
 	"item": [
 		{
-			"name": "getAllItems",
+			"name": "getAllEvents",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/v1/items/",
+					"raw": "http://localhost:3000/api/v1/Events/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -21,7 +21,7 @@
 					"path": [
 						"api",
 						"v1",
-						"items",
+						"Events",
 						""
 					]
 				}
@@ -43,7 +43,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/v1/items/",
+					"raw": "http://localhost:3000/api/v1/Events/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -52,7 +52,7 @@
 					"path": [
 						"api",
 						"v1",
-						"items",
+						"Events",
 						""
 					]
 				}
@@ -74,7 +74,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/v1/items/:id",
+					"raw": "http://localhost:3000/api/v1/Events/:id",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -83,7 +83,7 @@
 					"path": [
 						"api",
 						"v1",
-						"items",
+						"Events",
 						":id"
 					],
 					"variable": [
@@ -102,7 +102,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/v1/items/:id",
+					"raw": "http://localhost:3000/api/v1/Events/:id",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -111,7 +111,7 @@
 					"path": [
 						"api",
 						"v1",
-						"items",
+						"Events",
 						":id"
 					],
 					"variable": [
