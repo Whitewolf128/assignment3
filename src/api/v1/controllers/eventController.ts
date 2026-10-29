@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { createEvents, getAllEvents as fetchAllEvents} from "../services/eventService";
+import { createEvents as createEventService, getAllEvents as fetchAllEvents} from "../services/eventService";
 import { HTTP_STATUS } from "../../../constants/httpConstants";
 import { Event } from "../models/eventModel";
 import * as eventService from "../services/eventService";
@@ -52,7 +52,7 @@ export const createEventsController = async (req: Request,
             updatedAt
         };
  
-        const events: Event = await createEvents(event);
+        const events: Event = await createEventService(event);
  
         res.status(HTTP_STATUS.CREATED).json
         ({  message: "Event created",

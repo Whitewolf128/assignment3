@@ -1,4 +1,4 @@
-node_modules/
+/node_modules/
 dist/
-assignment3-2f09b-firebase-adminsdk-fbsvc-dc98a8d34a
+../assignment3-2f09b-firebase-adminsdk-fbsvc-dc98a8d34a.json
 .vscode/
