@@ -1,7 +1,7 @@
 // import the express application and type definition
 import express, { Express } from "express";
 import morgan from "morgan";
-import itemRoutes from "./api/v1/routes/eventRoutes";
+import eventRouter from "./api/v1/routes/eventRoutes";
 
 // initialize the express application
 const app: Express = express();
@@ -43,8 +43,8 @@ app.get("/api/v1/health", (req, res) => {
 });
 
 // Route Imports START
-// "/api/v1/items" will prefix all item routes
-app.use("/api/v1/items", itemRoutes);
+// "/api/v1" prefixes all versioned API routes
+app.use("/api/v1/", eventRouter);
 
 // Route Imports END
 

@@ -4,7 +4,7 @@ import * as eventController from "../src/api/v1/controllers/eventController";
 import * as eventService from "../src/api/v1/services/eventService";
 import { Event } from "../src/api/v1/models/eventModel"; 
 import { mock } from "node:test";
-import { beforeEach,afterAll, describe, expect, it, jest } from "@jest/globals";
+import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 
 jest.mock("../src/api/v1/services/eventService");
 
@@ -39,13 +39,9 @@ describe("Event Controller", () => {
                     updatedAt: new Date(),
                 },
             ];
-            (eventService.getAllEvents as jest.Mock).mockReturnValue(mockEvents);
+            jest.mocked(eventService.getAllEvents).mockResolvedValue(mockEvents);
 
-            await (eventController.getAllEvents as unknown as (
-                req: Request,
-                res: Response,
-                next: NextFunction
-            ) => Promise<void>)(
+            await eventController.getAllEventsController(
                 mockReq as Request,
                 mockRes as Response,
                 mockNext
@@ -53,7 +49,8 @@ describe("Event Controller", () => {
 
             expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.OK);
             expect(mockRes.json).toHaveBeenCalledWith({
-                message: "Events retrieved successfully",
+                message: "events Retrieved",
+                count: mockEvents.length,
                 data: mockEvents,
             });
         });
@@ -78,13 +75,9 @@ describe("Event Controller", () => {
             };
 
             mockReq.body = mockBody;
-            (eventService.createEvents as jest.Mock).mockReturnValue(mockEvent);
+            jest.mocked(eventService.createEvents).mockResolvedValue(mockEvent);
 
-            await (eventController.createEvents as unknown as (
-                req: Request,
-                res: Response,
-                next: NextFunction
-            ) => Promise<void>)(
+            await eventController.createEventsController(
                 mockReq as Request,
                 mockRes as Response,
                 mockNext
@@ -92,27 +85,23 @@ describe("Event Controller", () => {
 
             expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.CREATED);
             expect(mockRes.json).toHaveBeenCalledWith({
-                message: "Event created successfully",
+                message: "Event created",
                 data: mockEvent,
             });
         });
 
-        it("should return 400 when name is missing", async () => {
-            mockReq.body = { description: "Test Description" };
+        it("should return 500 when creation fails", async () => {
+            jest.mocked(eventService.createEvents).mockRejectedValue(new Error("Service failure"));
 
-            await (eventController.createEvents as unknown as (
-                req: Request,
-                res: Response,
-                next: NextFunction
-            ) => Promise<void>)(
+            await eventController.createEventsController(
                 mockReq as Request,
                 mockRes as Response,
                 mockNext
             );
 
-            expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.BAD_REQUEST);
+            expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.INTERNAL_SERVER_ERROR);
             expect(mockRes.json).toHaveBeenCalledWith({
-                message: "Event name is required",
+                message: "Failed to create event",
             });
         });
     });

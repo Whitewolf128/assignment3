@@ -94,32 +94,3 @@ export const deleteEventController = (req: Request, res: Response): void => {
     }
     
 };
-
-export function getAllItems(getAllItems: any) {
-    throw new Error("Function not implemented.");
-}
-
-export function createItem(createItem: any) {
-    throw new Error("Function not implemented.");
-}
-
-export function updateItem(updateItem: any) {
-    throw new Error("Function not implemented.");
-}
-
-export function deleteEvent(deleteEvent: any) {
-    throw new Error("Function not implemented.");
-}
-
-export function updateEvent(updateEvent: any) {
-    throw new Error("Function not implemented.");
-}
-
-export function getAllEvents(getAllEvents: any) {
-    throw new Error("Function not implemented.");
-}
-
-
-export function createEvents(createEvents: any) {
-    throw new Error("Function not implemented.");
-}
