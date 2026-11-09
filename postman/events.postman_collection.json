@@ -29,13 +29,13 @@
 			"response": []
 		},
 		{
-			"name": "createItem",
+			"name": "createEvent",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"\",\r\n    \"description\": \"Just a gizmo\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Community Meetup\",\r\n    \"date\": \"2030-01-01T18:00:00.000Z\",\r\n    \"capacity\": 100,\r\n    \"registrationCount\": 1,\r\n    \"status\": \"active\",\r\n    \"category\": \"meetup\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

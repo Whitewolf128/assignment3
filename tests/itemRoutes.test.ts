@@ -41,7 +41,6 @@ describe("Event Routes", () => {
                 registrationCount: 50,
                 status: "active",
                 category: "conference",
-                content: "A test event",
             }; 
 
             const response = await request(app)
