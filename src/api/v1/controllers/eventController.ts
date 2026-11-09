@@ -94,3 +94,26 @@ export const deleteEventController = (req: Request, res: Response): void => {
     }
     
 };
+
+export const getEventsByIdController = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const { id } = req.params;
+        const events = await eventService.getEventsById(id);
+        if (events.length === 0) {
+            res.status(HTTP_STATUS.NOT_FOUND).json({
+                message: "Product not found"
+            });
+            return;
+        }
+        res.status(HTTP_STATUS.OK).json({
+            message: "Product retrieved",
+            data: events[0]
+        });
+    } catch (error: unknown) {
+        next(error);
+    }
+};

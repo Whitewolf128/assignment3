@@ -66,4 +66,15 @@ export const deleteEvent = (id: string): string => {
     // Logic to delete an item from the database
     return "Event has been deleted";
 };
+
+export const getEventsById = async (id: string): Promise<Event[]> => {
+    const event = (await getAllEvents()).find((e) => e.id === id);
+  if (!event) {
+    return [];
+  }
+
+  return [{
+    ...event
+  }];
+};
 // ... other service functions (getPostById, updatePost, deletePost) ...
