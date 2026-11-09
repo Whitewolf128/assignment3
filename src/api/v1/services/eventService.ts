@@ -1,5 +1,6 @@
 import { Event } from "../models/eventModel";
 import * as firestoreRepository from "../repostitories/firestoreRepository";
+import { Timestamp } from "firebase-admin/firestore";
 /**
  * Updates an existing post.
  * @param {Post} postData - The updated post data.
@@ -16,7 +17,14 @@ export const getAllEvents = async(): Promise<Event[]> => {
             const data = doc.data();
             return {
                 id: doc.id,
-                ...data
+                ...data,
+                date: data.date instanceof Timestamp ? data.date.toDate() : data.date,
+                createdAt: data.createdAt instanceof Timestamp
+                    ? data.createdAt.toDate()
+                    : data.createdAt,
+                updatedAt: data.updatedAt instanceof Timestamp
+                    ? data.updatedAt.toDate()
+                    : data.updatedAt,
             } as Event;
         });
         return events; 
@@ -62,9 +70,13 @@ export const updateEvent = (id: string, event: string): string => {
     return "Event has been updated";
 };
 
-export const deleteEvent = (id: string): string => {
-    // Logic to delete an item from the database
-    return "Event has been deleted";
+export const deleteEvent = async (id: string): Promise<void> => {
+    try {
+        await firestoreRepository.deleteDocument(COLLECTION, id);
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        throw new Error(`Failed to delete event: ${errorMessage}`);
+    }
 };
 
 export const getEventsById = async (id: string): Promise<Event[]> => {

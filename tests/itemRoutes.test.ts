@@ -18,6 +18,9 @@ jest.mock("../src/api/v1/controllers/eventController", () => ({
     deleteEventController: jest.fn((req: Request, res: Response) =>
         res.status(HTTP_STATUS.OK).json({ id: req.params.id }),
     ),
+    getEventsByIdController: jest.fn((_req: Request, res: Response) =>
+        res.status(HTTP_STATUS.OK).json({}),
+    ),
 }));
 
 describe("Event Routes", () => {

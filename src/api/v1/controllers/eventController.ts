@@ -82,11 +82,11 @@ export const updateEventController = (req: Request, res: Response): void => {
     
 };
 
-export const deleteEventController = (req: Request, res: Response): void => {
-    try{
+export const deleteEventController = async (req: Request, res: Response): Promise<void> => {
+    try {
         const { id } = req.params;
-    eventService.deleteEvent(Array.isArray(id) ? id[0] : id);
-    res.status(HTTP_STATUS.OK).json({ message: "Event deleted" });
+        await eventService.deleteEvent(Array.isArray(id) ? id[0] : id);
+        res.status(HTTP_STATUS.OK).json({ message: "Event deleted" });
     } catch (error: unknown) {
         res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
             message: "Failed to Delete event",
