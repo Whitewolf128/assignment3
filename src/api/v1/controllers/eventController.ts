@@ -1,10 +1,13 @@
+// Import Libraries
 import { Request, Response, NextFunction } from "express";
 import { createEvents as createEventService, getAllEvents as fetchAllEvents} from "../services/eventService";
 import { HTTP_STATUS } from "../../../constants/httpConstants";
 import { Event } from "../models/eventModel";
 import * as eventService from "../services/eventService";
 
-
+/*
+Export getAllEventsController which gets all events and returns them in the response.
+*/
 export const getAllEventsController = async (
     req: Request,
     res: Response,
@@ -24,6 +27,7 @@ export const getAllEventsController = async (
         })
     }
 };
+// Export createEventsController which creates a new event and returns it in the response.
 export const createEventsController = async (req: Request,
     res: Response, next: NextFunction): Promise<void> =>
 {
@@ -67,21 +71,23 @@ export const createEventsController = async (req: Request,
     }
 };
 
-export const updateEventController = (req: Request, res: Response): void => {
-    try{
+// Export updateEventController which updates an existing event and returns a success message in the response.
+export const updateEventController = async (req: Request, res: Response): Promise<void> => {
+    try {
         const { id } = req.params;
-    const updatedEvent: string = req.body;
-    eventService.updateEvent(Array.isArray(id) ? id[0] : id, updatedEvent);
-    res.status(HTTP_STATUS.OK).json({ message: "Event updated", data: updateEventController });
-    }
-    catch(error:unknown){
+        const eventData: Partial<Event> = req.body;
+        const updatedEvent = await eventService.updateEvent(
+            Array.isArray(id) ? id[0] : id,
+            eventData
+        );
+        res.status(HTTP_STATUS.OK).json({ message: "Event updated", data: updatedEvent });
+    } catch (error: unknown) {
         res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-            message: "Failed to update event"
+            message: "Failed to update event",
         });
     }
-    
 };
-
+// Export deleteEventController which deletes an existing event and returns a success message in the response.
 export const deleteEventController = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
@@ -94,7 +100,7 @@ export const deleteEventController = async (req: Request, res: Response): Promis
     }
     
 };
-
+// Export getEventsByIdController which retrieves an event by its ID and returns it in the response.
 export const getEventsByIdController = async (
     req: Request,
     res: Response,
@@ -105,12 +111,12 @@ export const getEventsByIdController = async (
         const events = await eventService.getEventsById(id);
         if (events.length === 0) {
             res.status(HTTP_STATUS.NOT_FOUND).json({
-                message: "Product not found"
+                message: "Event not found"
             });
             return;
         }
         res.status(HTTP_STATUS.OK).json({
-            message: "Product retrieved",
+            message: "Event retrieved",
             data: events[0]
         });
     } catch (error: unknown) {

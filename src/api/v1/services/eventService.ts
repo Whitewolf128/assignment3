@@ -1,15 +1,18 @@
+// Import Libraries
 import { Event } from "../models/eventModel";
 import * as firestoreRepository from "../repostitories/firestoreRepository";
 import { Timestamp } from "firebase-admin/firestore";
 /**
- * Updates an existing post.
- * @param {Post} postData - The updated post data.
+ * Updates an existing event.
+ * @param {Event} eventData - The updated event data.
  * @returns {Promise<void>}
  * @throws {Error} - If validation or repository operation fails.
  */
 
+// Define the Firestore collection name for events
 const COLLECTION = "event";
 
+// The service function to get all events from the Firestore collection.
 export const getAllEvents = async(): Promise<Event[]> => {
     try{
         const snapshot = await firestoreRepository.getDocuments(COLLECTION);
@@ -35,6 +38,7 @@ export const getAllEvents = async(): Promise<Event[]> => {
     }
 }
 
+// The service function to create a new event in the Firestore collection.
 export const createEvents = async( eventData: {
     name: string;
     date: Date;
@@ -65,11 +69,18 @@ export const createEvents = async( eventData: {
     }
 };
 
-export const updateEvent = (id: string, event: string): string => {
-    // Logic to update an item in the database
-    return "Event has been updated";
+// The service function to update an existing event in the Firestore collection.
+export const updateEvent = async (id: string, eventData: Partial<Event>): Promise<Event> => {
+    try {
+        await firestoreRepository.updateDocument(COLLECTION, id, eventData);
+        const updatedEvent = await getEventsById(id);
+        return updatedEvent[0];
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        throw new Error(`Failed to update event: ${errorMessage}`);
+    }
 };
-
+// The service function to delete an existing event from the Firestore collection.
 export const deleteEvent = async (id: string): Promise<void> => {
     try {
         await firestoreRepository.deleteDocument(COLLECTION, id);
@@ -78,7 +89,7 @@ export const deleteEvent = async (id: string): Promise<void> => {
         throw new Error(`Failed to delete event: ${errorMessage}`);
     }
 };
-
+// The service function to retrieve an event by its ID from the Firestore collection.
 export const getEventsById = async (id: string): Promise<Event[]> => {
     const event = (await getAllEvents()).find((e) => e.id === id);
   if (!event) {
@@ -89,4 +100,3 @@ export const getEventsById = async (id: string): Promise<Event[]> => {
     ...event
   }];
 };
-// ... other service functions (getPostById, updatePost, deletePost) ...
